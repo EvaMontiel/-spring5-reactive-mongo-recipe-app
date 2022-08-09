@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
 import guru.springframework.spring5recipeapp.repositories.CategoryRepository;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
+import guru.springframework.spring5recipeapp.repositories.reactive.CategoryReactiveRepository;
+import guru.springframework.spring5recipeapp.repositories.reactive.RecipeReactiveRepository;
+import guru.springframework.spring5recipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -41,10 +45,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
+		
 		loadCategories();
 		loadUom();
 		recipeRepository.saveAll(getRecipes());
 		log.debug("Loading Bootstrap Data");
+		
 	}
 	
 	private void loadCategories() {
